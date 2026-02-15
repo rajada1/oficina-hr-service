@@ -23,12 +23,9 @@ import java.util.UUID;
 public class FuncionarioApplicationService {
 
     private final FuncionarioRepository funcionarioRepository;
-    private final EventPublishingService eventPublishingService;
 
-    public FuncionarioApplicationService(FuncionarioRepository funcionarioRepository,
-            EventPublishingService eventPublishingService) {
+    public FuncionarioApplicationService(FuncionarioRepository funcionarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
-        this.eventPublishingService = eventPublishingService;
     }
 
     /**
@@ -47,9 +44,6 @@ public class FuncionarioApplicationService {
                 requestDTO.salario());
 
         Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
-
-        // Publicar evento
-        eventPublishingService.publicarFuncionarioCriado(funcionarioSalvo);
 
         return FuncionarioResponseDTO.fromDomain(funcionarioSalvo);
     }
@@ -93,9 +87,6 @@ public class FuncionarioApplicationService {
 
         Funcionario funcionarioAtualizado = funcionarioRepository.save(funcionario);
 
-        // Publicar evento
-        eventPublishingService.publicarFuncionarioAtualizado(funcionarioAtualizado);
-
         return FuncionarioResponseDTO.fromDomain(funcionarioAtualizado);
     }
 
@@ -108,9 +99,6 @@ public class FuncionarioApplicationService {
                         () -> new ResourceNotFoundException("Funcionário não encontrado com pessoaId: " + pessoaId));
 
         funcionarioRepository.deleteById(pessoaId);
-
-        // Publicar evento
-        eventPublishingService.publicarFuncionarioDeletado(pessoaId);
     }
 
     /**
@@ -124,9 +112,6 @@ public class FuncionarioApplicationService {
         funcionario.setAtivo(false);
 
         Funcionario funcionarioAtualizado = funcionarioRepository.save(funcionario);
-
-        // Publicar evento
-        eventPublishingService.publicarFuncionarioAtualizado(funcionarioAtualizado);
 
         return FuncionarioResponseDTO.fromDomain(funcionarioAtualizado);
     }
