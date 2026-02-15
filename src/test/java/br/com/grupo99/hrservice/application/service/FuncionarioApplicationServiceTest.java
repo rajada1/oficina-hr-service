@@ -31,9 +31,6 @@ class FuncionarioApplicationServiceTest {
     @Mock
     private FuncionarioRepository funcionarioRepository;
 
-    @Mock
-    private EventPublishingService eventPublishingService;
-
     @InjectMocks
     private FuncionarioApplicationService service;
 
@@ -72,7 +69,6 @@ class FuncionarioApplicationServiceTest {
         assertEquals("TI", response.setor());
         assertEquals("Desenvolvedor", response.cargo());
         verify(funcionarioRepository, times(1)).save(any(Funcionario.class));
-        verify(eventPublishingService, times(1)).publicarFuncionarioCriado(any(Funcionario.class));
     }
 
     @Test
@@ -137,7 +133,6 @@ class FuncionarioApplicationServiceTest {
 
         // Assert
         verify(funcionarioRepository, times(1)).deleteById(pessoaId);
-        verify(eventPublishingService, times(1)).publicarFuncionarioDeletado(pessoaId);
     }
 
     @Test
@@ -161,7 +156,6 @@ class FuncionarioApplicationServiceTest {
         // Assert
         assertNotNull(response);
         assertFalse(response.ativo());
-        verify(eventPublishingService, times(1)).publicarFuncionarioAtualizado(any(Funcionario.class));
     }
 
     private void setTimestamps(Funcionario funcionario) {
